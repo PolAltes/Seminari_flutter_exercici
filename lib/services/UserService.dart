@@ -46,7 +46,11 @@ class UserService {
     final response = await http.get(Uri.parse('$baseUrl/$id'));
 
     if (response.statusCode == 200) {
-      return User.fromJson(jsonDecode(response.body));
+      final jsonData = jsonDecode(response.body);
+      if (jsonData['_id'] == null) {
+      jsonData['_id'] = id; // Assignar id si no existeix
+      }
+      return User.fromJson(jsonData);
     } else {
       throw Exception("Error a l'obtenir usuari: ${response.statusCode}");
     }
